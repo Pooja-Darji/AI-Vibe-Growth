@@ -1,0 +1,137 @@
+import { Campaign, PerformanceDataPoint } from "@/types";
+
+export const mockCampaigns: Campaign[] = [
+  {
+    id: "1",
+    name: "Summer Sale 2024",
+    impressions: 125000,
+    clicks: 3250,
+    ctr: 2.6,
+    conversions: 145,
+    status: "Active",
+    startDate: "2024-06-01",
+    endDate: "2024-08-31",
+    budget: 50000,
+    spend: 32500,
+  },
+  {
+    id: "2",
+    name: "Product Launch - Tech Gadgets",
+    impressions: 89000,
+    clicks: 2670,
+    ctr: 3.0,
+    conversions: 98,
+    status: "Active",
+    startDate: "2024-07-15",
+    endDate: "2024-09-15",
+    budget: 40000,
+    spend: 18900,
+  },
+  {
+    id: "3",
+    name: "Black Friday Preview",
+    impressions: 210000,
+    clicks: 4200,
+    ctr: 2.0,
+    conversions: 210,
+    status: "Paused",
+    startDate: "2024-10-01",
+    endDate: "2024-11-30",
+    budget: 75000,
+    spend: 0,
+  },
+  {
+    id: "4",
+    name: "Holiday Gift Guide",
+    impressions: 156000,
+    clicks: 4680,
+    ctr: 3.0,
+    conversions: 187,
+    status: "Active",
+    startDate: "2024-11-01",
+    endDate: "2024-12-31",
+    budget: 60000,
+    spend: 45200,
+  },
+  {
+    id: "5",
+    name: "Back to School Campaign",
+    impressions: 98000,
+    clicks: 1960,
+    ctr: 2.0,
+    conversions: 78,
+    status: "Paused",
+    startDate: "2024-08-01",
+    endDate: "2024-09-15",
+    budget: 35000,
+    spend: 18900,
+  },
+  {
+    id: "6",
+    name: "New Year Special",
+    impressions: 145000,
+    clicks: 4350,
+    ctr: 3.0,
+    conversions: 174,
+    status: "Active",
+    startDate: "2024-12-15",
+    endDate: "2025-01-31",
+    budget: 55000,
+    spend: 32100,
+  },
+  {
+    id: "7",
+    name: "Valentine's Day Collection",
+    impressions: 112000,
+    clicks: 3360,
+    ctr: 3.0,
+    conversions: 134,
+    status: "Active",
+    startDate: "2025-01-15",
+    endDate: "2025-02-28",
+    budget: 45000,
+    spend: 28900,
+  },
+  {
+    id: "8",
+    name: "Spring Clearance",
+    impressions: 87000,
+    clicks: 1740,
+    ctr: 2.0,
+    conversions: 69,
+    status: "Paused",
+    startDate: "2024-03-01",
+    endDate: "2024-05-31",
+    budget: 30000,
+    spend: 15200,
+  },
+];
+
+export const generatePerformanceData = (
+  campaignId: string,
+  days: number = 30
+): PerformanceDataPoint[] => {
+  const data: PerformanceDataPoint[] = [];
+  const today = new Date();
+  
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    
+    const baseImpressions = 3000 + Math.random() * 2000;
+    const baseCtr = 2.0 + Math.random() * 1.5;
+    const clicks = Math.floor(baseImpressions * (baseCtr / 100));
+    const conversions = Math.floor(clicks * (0.03 + Math.random() * 0.02));
+    
+    data.push({
+      date: date.toISOString().split("T")[0],
+      impressions: Math.floor(baseImpressions),
+      clicks,
+      conversions,
+      ctr: Number((baseCtr).toFixed(2)),
+    });
+  }
+  
+  return data;
+};
+
