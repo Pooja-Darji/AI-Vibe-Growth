@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { useCampaignStore } from "@/stores/campaignStore";
 import { generatePerformanceData } from "@/data/mockCampaigns";
@@ -12,7 +12,10 @@ import { Card } from "@/components/ui/Card";
 import { useCampaignPolling } from "@/hooks/useCampaignPolling";
 
 const PerformanceChart = dynamic(
-  () => import("@/components/dashboard/PerformanceChart").then((mod) => ({ default: mod.PerformanceChart })),
+  () =>
+    import("@/components/dashboard/PerformanceChart").then((mod) => ({
+      default: mod.PerformanceChart,
+    })),
   {
     loading: () => <Skeleton className="h-64 w-full" />,
   }
@@ -97,9 +100,6 @@ export function MarketingDashboard() {
                 ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
                 : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
             }`}
-            aria-label="Switch to table view"
-            role="button"
-            aria-pressed={viewMode === "table"}
           >
             Table
           </button>
@@ -110,9 +110,6 @@ export function MarketingDashboard() {
                 ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
                 : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
             }`}
-            aria-label="Switch to cards view"
-            aria-pressed={viewMode === "cards"}
-            role="button"
           >
             Cards
           </button>
@@ -133,6 +130,7 @@ export function MarketingDashboard() {
             </div>
           </div>
         </Card>
+
         <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-700">
           <div className="flex items-center justify-between">
             <div>
@@ -184,10 +182,12 @@ export function MarketingDashboard() {
       ) : (
         <>
           {viewMode === "table" ? (
-            <CampaignTable
-              campaigns={filteredCampaigns}
-              highlightedCampaignId={highlightedCampaignId}
-            />
+            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+              <CampaignTable
+                campaigns={filteredCampaigns}
+                highlightedCampaignId={highlightedCampaignId}
+              />
+            </Suspense>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCampaigns.map((campaign) => (
@@ -211,4 +211,3 @@ export function MarketingDashboard() {
     </div>
   );
 }
-
